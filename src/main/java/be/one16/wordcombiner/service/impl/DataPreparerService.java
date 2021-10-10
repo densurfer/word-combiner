@@ -5,22 +5,24 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 
 @Service
 public class DataPreparerService {
 
-	List<PossibleWordCombination> preparePossibleWordCombinations(List<String> data,
+	List<PossibleWordCombination> preparePossibleWordCombinations(Stream<String> data,
 																  int toAchieveWordLength) {
-		var allOtherWordPieces = data.stream()
-				.filter(wordDoesNotHaveLength(toAchieveWordLength))
-				.collect(Collectors.toList());
+		var toAchieveWordLengthMap = data
+				.collect(Collectors.groupingBy(word -> wordHasLength(word, toAchieveWordLength)));
 
-		return data.stream()
-				.filter(wordHasLength(toAchieveWordLength))
+		List<String> toAchieveWords = toAchieveWordLengthMap.get(true);
+		List<String> allOtherWordPieces = toAchieveWordLengthMap.get(false);
+
+		return toAchieveWords.stream()
 				.map(toAchieveWord -> assemblePossibleWordCombination(toAchieveWord, allOtherWordPieces))
-				.collect(Collectors.toList());
+				.toList();
 	}
 
 	private PossibleWordCombination assemblePossibleWordCombination(String toAchieveWord,
@@ -29,7 +31,7 @@ public class DataPreparerService {
 				.filter(toAchieveWord::contains)
 				.map(piece -> assembleWordPieceLocation(piece, toAchieveWord))
 				.flatMap(Collection::stream)
-				.collect(Collectors.toList());
+				.toList();
 
 		return PossibleWordCombination.of(toAchieveWord, wordPieceLocations);
 	}

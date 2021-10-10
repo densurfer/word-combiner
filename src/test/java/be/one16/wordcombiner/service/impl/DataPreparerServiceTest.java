@@ -24,7 +24,7 @@ class DataPreparerServiceTest {
 				"abcde"
 		);
 
-		var wordCombos = dataPreparer.preparePossibleWordCombinations(data, 5);
+		var wordCombos = dataPreparer.preparePossibleWordCombinations(data.stream(), 5);
 
 		var one16 = PossibleWordCombination.of("one16", List.of(
 				WordPieceLocation.of("one", LocationInWord.of(0, 2)),
