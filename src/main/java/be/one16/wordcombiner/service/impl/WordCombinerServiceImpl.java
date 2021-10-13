@@ -24,23 +24,20 @@ public class WordCombinerServiceImpl implements WordCombinerService {
 
     @Override
     public List<WordCombination> getWordCombinations(Stream<String> data, int toAchieveWordLength) {
-        var possibleWordCombinations = dataPreparer.preparePossibleWordCombinations(data, toAchieveWordLength);
+        var possibleWordCombinations = dataPreparer.preparePossibleWordCombinations(
+                data,
+                toAchieveWordLength
+        );
 
-        return possibleWordCombinations.stream()
+        return possibleWordCombinations.parallelStream()
                 .map(WordCombiner::combine)
                 .toList();
     }
 
     @Override
-    @Transactional
-    public void setWorkingData(List<String> data) {
-        repository.deleteAll();
-
-        List<WordCombinerDataEntity> entities = data.stream()
-                .map(WordCombinerDataEntity::new)
-                .toList();
-
-        repository.saveAll(entities);
+    public List<WordCombination> getWordCombinations(MultipartFile file, int toAchieveWordLength) throws IOException {
+        Stream<String> lines = new BufferedReader(new InputStreamReader(file.getInputStream())).lines();
+        return getWordCombinations(lines, toAchieveWordLength);
     }
 
     @Override
@@ -61,12 +58,4 @@ public class WordCombinerServiceImpl implements WordCombinerService {
 
         return getWordCombinations(data, toAchieveWordLength);
     }
-
-    @Override
-    public List<WordCombination> getWordCombinations(MultipartFile file, int toAchieveWordLength) throws IOException {
-        Stream<String> lines = new BufferedReader(new InputStreamReader(file.getInputStream())).lines();
-        return getWordCombinations(lines, toAchieveWordLength);
-    }
-
-
 }

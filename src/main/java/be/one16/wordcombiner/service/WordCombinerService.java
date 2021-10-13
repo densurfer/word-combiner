@@ -11,8 +11,6 @@ public interface WordCombinerService {
 
 	List<WordCombination> getWordCombinations(Stream<String> data, int toAchieveWordLength);
 
-	void setWorkingData(List<String> data);
-
 	List<WordCombination> getWordCombinationsOfStoredData(int toAchieveWordLength);
 
 	List<WordCombination> getWordCombinations(MultipartFile file, int toAchieveWordLength) throws IOException;
