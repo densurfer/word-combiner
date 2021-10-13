@@ -42,7 +42,7 @@ public class WordCombinationController {
     }
 
     @PostMapping("/file")
-    public List<WordCombination> handleFileUpload(@RequestParam("file") MultipartFile file,
+    public List<WordCombination> combineFromFile(@RequestParam("file") MultipartFile file,
                                                   @RequestParam(
                                                           required = false,
                                                           defaultValue = "${to.achieve.word.length.default}",
@@ -59,7 +59,7 @@ public class WordCombinationController {
 
     @PostMapping("/data/file")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void sendData(@RequestParam("file") MultipartFile file) throws IOException {
+    public void setDataFromFile(@RequestParam("file") MultipartFile file) throws IOException {
         wordCombinerService.setWorkingData(file);
     }
 }
