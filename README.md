@@ -1,6 +1,6 @@
 ![Word Combiner](WordCombiner.png)
 
-### Developed by Jeroen van De Laer
+# Developed by Jeroen Van De Laer
 
 ## Requirements
 * java 17
